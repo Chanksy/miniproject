@@ -115,7 +115,7 @@ function controlsHandler() {
     if (mode === "play") {
         isplaying = window.setInterval(function() {
             this.playAudio();
-        }, this.bpm_slider.value);
+        }, Math.floor( 60000.0/bpm_slider.value));
 
     } else if (mode === "stop") {
         clearInterval(isplaying);
