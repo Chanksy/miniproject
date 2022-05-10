@@ -8,7 +8,8 @@ var volume_slider;
 var bpm;
 
 function createDrumButtons() {
-    var size = 28;
+    // Create each button: 6 rows, 16 columns
+    var size = 28; // Button size
     for (var i = 1; i < 7; i++) {
         $('<div class="row" id="row-' + i + '"></div>').appendTo(document.getElementById("drumbuttons"));
         $('<button id="drum-' + i + '" type="button" class="btn btn-outline-primary active" data-toggle="button" aria-pressed="false" id="toggle-row-' + i + '" style="height: ' + size + 'px; width: ' + size*3.8 + 'px; margin: 1px;"></button>').prependTo(document.getElementById("row-" + i));
@@ -27,6 +28,7 @@ function createDrumButtons() {
 }
 
 function setDrumButtons() {
+    // Map names to main instrument toggles
     for (var i = 1; i < 7; i++) {
         document.getElementById("drum-" + i).innerText = d[i-1];
         document.getElementById("drum-" + i).style.fontSize = "small";
@@ -34,6 +36,7 @@ function setDrumButtons() {
 }
 
 function controlsHandler() {
+    // Play/pause depending on Controls radio
     let mode = $(":radio[name=controls]:checked").val();
     if (mode === "play") {
         isplaying = window.setInterval(function() {
@@ -48,7 +51,9 @@ function controlsHandler() {
 }
 
 function playAudio() {
+    // Play audio per row
     for(var i = 1; i < 7; i++) {
+        // Handle each button
         var cBeat = $('.sample[data-row="' + i + '"][data-column="' + beat + '"]');
         if (cBeat.hasClass('active')) {
             if (document.getElementById("drum-" + i).classList.contains("active")) {
@@ -66,6 +71,7 @@ function playAudio() {
 }
 
 function stopAudio() {
+    //Stop all notes
     for (var i = 0; i < 6; i++) {
         MIDI.noteOff(0, mapping[i]);
     }
@@ -129,7 +135,12 @@ $(document).ready(function() {
     bpm_slider = document.getElementById("bpm");
     var bpm_value = document.getElementById("bpm-value");
 
+    // Handle dynamic bpm slider
+
     bpm_slider.oninput = function() {
+        clearInterval(isplaying);
+        stopAudio();
+        controlsHandler();
         bpm_value.innerHTML = this.value;
     }
 
