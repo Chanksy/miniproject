@@ -1,4 +1,5 @@
 let mapping = [49, 36, 46, 44, 47, 38];
+let d = ["Crash", "Kick", "Open HiHat", "Closed HiHat", "Med Tom", "Snare"];
 var isplaying;
 var delay;
 var beat = 1;
@@ -80,10 +81,10 @@ function handleNoteOff(key_number) {
 }
 
 function createDrumButtons() {
-    var size = 30;
+    var size = 28;
     for (var i = 1; i < 7; i++) {
         $('<div class="row" id="row-' + i + '"></div>').appendTo(document.getElementById("drumbuttons"));
-        $('<button type="button" class="btn btn-outline-primary active" data-toggle="button" aria-pressed="false" id="toggle-row-' + i + '" style="height: ' + size + 'px; width: ' + size*2.5 + 'px; margin: 1px;"></button>').prependTo(document.getElementById("row-" + i));
+        $('<button id="drum-' + i + '" type="button" class="btn btn-outline-primary active" data-toggle="button" aria-pressed="false" id="toggle-row-' + i + '" style="height: ' + size + 'px; width: ' + size*3.8 + 'px; margin: 1px;"></button>').prependTo(document.getElementById("row-" + i));
         for (var j = 1; j < 17; j++) {
             if (j < 5) {
                 $('<button type="button" class="btn btn-outline-primary sample" data-toggle="button" aria-pressed="false" data-row="' + i + '" data-column="' + j + '" style="height:' + size + 'px;width:' + size + 'px; margin: 1px;"></button>').appendTo(document.getElementById("row-" + i));
@@ -100,11 +101,9 @@ function createDrumButtons() {
 
 function setDrumButtons() {
     for (var i = 1; i < 7; i++) {
-        for (var j = 1; j < 17; j++) {
-            $("")
-        }
+        document.getElementById("drum-" + i).innerText = d[i-1];
+        document.getElementById("drum-" + i).style.fontSize = "small";
     }
-    $("#test-button").on("mousedown", test);
 }
 
 function toggleHandler() {
