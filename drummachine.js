@@ -3,6 +3,7 @@ var isplaying;
 var delay;
 var beat = 1;
 var bpm_slider;
+var volume_slider;
 var bpm;
 
 function handleNoteOn(key_number) {
@@ -118,6 +119,7 @@ function controlsHandler() {
         }, Math.floor( 60000.0/bpm_slider.value));
 
     } else if (mode === "stop") {
+        this.stopAudio();
         clearInterval(isplaying);
     }
 
@@ -129,17 +131,24 @@ function playAudio() {
     }else if(beat >= 16){
         beat = 1;
     }
-    for(var i = 1; i < 6 + 1; i++) {
+    for(var i = 1; i < 7; i++) {
         var cBeat = $('.sample[data-row="' + i + '"][data-column="' + beat + '"]');
         if (cBeat.hasClass('active')) {
             if (!cBeat.hasClass('disabled')) {
-                MIDI.noteOn(0, mapping[i], 60);
+                MIDI.noteOn(0, mapping[i-1], parseInt(volume_slider.value));
             } else {
-                MIDI.noteOff(0, mapping[i]);
+                MIDI.noteOff(0, mapping[i-1]);
             }
             cBeat.addClass('hit');
         }
     }
+}
+
+function stopAudio() {
+    for (var i = 0; i < 6; i++) {
+        MIDI.noteOff(0, mapping[i]);
+    }
+
 }
 
 function test() {
@@ -194,7 +203,7 @@ $(document).ready(function() {
     }
     // Set up slider displays
 
-    var volume_slider = document.getElementById("volume");
+    volume_slider = document.getElementById("volume");
     var volume_value = document.getElementById("volume-value");
 
     volume_slider.oninput = function() {
