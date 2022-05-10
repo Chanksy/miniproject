@@ -48,21 +48,20 @@ function controlsHandler() {
 }
 
 function playAudio() {
-    if(beat < 16) {
-        beat++;
-    }else if(beat >= 16){
-        beat = 1;
-    }
     for(var i = 1; i < 7; i++) {
         var cBeat = $('.sample[data-row="' + i + '"][data-column="' + beat + '"]');
         if (cBeat.hasClass('active')) {
-            console.log(document.getElementById("drum-" + i).ariaPressed);
             if (document.getElementById("drum-" + i).classList.contains("active")) {
                 MIDI.noteOn(0, mapping[i-1], parseInt(volume_slider.value));
             } else {
                 MIDI.noteOff(0, mapping[i-1]);
             }
         }
+    }
+    if(beat < 16) {
+        beat++;
+    }else if(beat >= 16){
+        beat = 1;
     }
 }
 
