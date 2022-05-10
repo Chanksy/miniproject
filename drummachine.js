@@ -7,79 +7,6 @@ var bpm_slider;
 var volume_slider;
 var bpm;
 
-function handleNoteOn(key_number) {
-    // Find the pitch
-    let pitch = 60 + key_number;
-    /*
-     * You need to use the slider to get the lowest pitch number above
-     * rather than the hardcoded value
-     */
-
-    let sliderPitch = parseInt($("#pitch").val());
-
-    pitch = sliderPitch + key_number;
-
-    // Extract the amplitude value from the slider
-    let amplitude = parseInt($("#amplitude").val());
-
-    // Use the two numbers to start a MIDI note
-    MIDI.noteOn(0, pitch, amplitude);
-
-
-    /*
-     * You need to handle the chord mode here
-     */
-    let mode = $(":radio[name=play-mode]:checked").val();
-    if (mode === "major") {
-        pitch = sliderPitch + key_number + 4;
-        MIDI.noteOn(0, pitch, amplitude);
-        pitch = sliderPitch + key_number + 7;
-        MIDI.noteOn(0, pitch, amplitude);
-    }
-    else if (mode === "minor") {
-        pitch = sliderPitch + key_number + 3;
-        MIDI.noteOn(0, pitch, amplitude);
-        pitch = sliderPitch + key_number + 7;
-        MIDI.noteOn(0, pitch, amplitude);
-    }
-        
-
-}
-
-function handleNoteOff(key_number) {
-    // Find the pitch
-    let pitch = 60 + key_number;
-    /*
-     * You need to use the slider to get the lowest pitch number above
-     * rather than the hardcoded value
-     */
-    let sliderPitch = parseInt($("#pitch").val());
-
-    pitch = sliderPitch + key_number;
-
-    // Send the note off message for the pitch
-    MIDI.noteOff(0, pitch); 
-
-
-    /*
-     * You need to handle the chord mode here
-     */
-    let mode = $(":radio[name=play-mode]:checked").val();
-    if (mode === "major") {
-        pitch = sliderPitch + key_number + 4;
-        MIDI.noteOff(0, pitch);
-        pitch = sliderPitch + key_number + 7;
-        MIDI.noteOff(0, pitch);
-    }
-    else if (mode === "minor") {
-        pitch = sliderPitch + key_number + 3;
-        MIDI.noteOff(0, pitch);
-        pitch = sliderPitch + key_number + 7;
-        MIDI.noteOff(0, pitch);
-    }
-
-}
-
 function createDrumButtons() {
     var size = 28;
     for (var i = 1; i < 7; i++) {
@@ -106,10 +33,6 @@ function setDrumButtons() {
     }
 }
 
-function toggleHandler() {
-    document.getElementById()
-}
-
 function controlsHandler() {
     let mode = $(":radio[name=controls]:checked").val();
     if (mode === "play") {
@@ -133,12 +56,12 @@ function playAudio() {
     for(var i = 1; i < 7; i++) {
         var cBeat = $('.sample[data-row="' + i + '"][data-column="' + beat + '"]');
         if (cBeat.hasClass('active')) {
-            if (!cBeat.hasClass('disabled')) {
+            console.log(document.getElementById("drum-" + i).ariaPressed);
+            if (document.getElementById("drum-" + i).classList.contains("active")) {
                 MIDI.noteOn(0, mapping[i-1], parseInt(volume_slider.value));
             } else {
                 MIDI.noteOff(0, mapping[i-1]);
             }
-            cBeat.addClass('hit');
         }
     }
 }
@@ -148,11 +71,6 @@ function stopAudio() {
         MIDI.noteOff(0, mapping[i]);
     }
 
-}
-
-function test() {
-    console.log("yee")
-    MIDI.noteOn(0, 65, 60);
 }
 
 /*
